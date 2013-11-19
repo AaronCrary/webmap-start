@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+    
+    <head>
+        <meta charset="utf-8" />
+        <meta content="initial-scale=1, maximum-scale=1,user-scalable=no" name="viewport"
+        />
+        <title>KY GridMod</title>
+        <link href="http://js.arcgis.com/3.7/js/esri/css/esri.css"
+        rel="stylesheet" type="text/css" />
+        <style type="text/css">
+            html, body, #map {
+                padding:0;
+                margin:0;
+                height:100%;
+            }
+            #BasemapToggle {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                z-index: 50;
+            }
+            #HomeButton {
+                position: absolute;
+                top: 95px;
+                left: 20px;
+                z-index: 50;
+            }
+            #search {
+                display: block;
+                position: absolute;
+                z-index: 2;
+                top: 20px;
+                left: 75px;
+            }
+        </style>
+        <script src="//js.arcgis.com/3.7/"></script>
+        <script>
+            var map;
+            var geocoder;
+            var locatorUrl = "http://servicesbeta.esri.com/ArcGIS/rest/services/LocateValveByAssetID/GeocodeServer";
+            require(["esri/map", "esri/dijit/BasemapToggle", "esri/dijit/HomeButton", "esri/dijit/Geocoder", "dojo/domReady!"], function(
+            Map, BasemapToggle, HomeButton, Geocoder) {
+
+                map = new Map("map", {
+                    center: [-84.530052, 38.929885],
+                    zoom: 11,
+                    basemap: "topo"
+                });
+
+                var myGeocoders = [{
+                    url: locatorUrl,
+                    name: "LocateValveByAssetID"
+                }];
+                geocoder = new Geocoder({
+                    map: map,
+                    autocomplete: true,
+                    arcgisGeocoder: false,
+                    geocoders: myGeocoders,
+                    value: "146317"
+                }, "search");
+                geocoder.startup();
+
+                var toggle = new BasemapToggle({
+                    map: map,
+                    basemap: "hybrid"
+                }, "BasemapToggle");
+                toggle.startup();
+
+                var home = new HomeButton({
+                    map: map
+                }, "HomeButton");
+                home.startup();
+
+            });
+        </script>
+    </head>
+    
+    <body>
+        <div class="map" id="map">
+            <div id="BasemapToggle"></div>
+            <div id="HomeButton"></div>
+            <div id="search"></div>
+        </div>
+    </body>
+
+</html>
